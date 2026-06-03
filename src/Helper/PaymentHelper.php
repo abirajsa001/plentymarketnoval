@@ -242,9 +242,9 @@ class PaymentHelper
     public function getCustomerAddress(int $addressId)
     {
         try {
-			// if (empty($addressId) || $addressId <= 0) {
-            //     return null;
-            // }
+			if (empty($addressId) || $addressId <= 0) {
+                return null;
+            }
             /** @var \Plenty\Modules\Authorization\Services\AuthHelper $authHelper */
             $authHelper = pluginApp(AuthHelper::class);
             $addressDetails = $authHelper->processUnguarded(function () use ($addressId) {

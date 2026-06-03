@@ -25,7 +25,7 @@ use Plenty\Modules\Payment\Contracts\PaymentRepositoryContract;
 use Plenty\Modules\Basket\Contracts\BasketRepositoryContract;
 use Plenty\Plugin\Http\Response;
 use Plenty\Plugin\Log\Loggable;
-// use Plenty\Modules\Webshop\Helpers\UrlQuery;
+use Plenty\Modules\Webshop\Helpers\UrlQuery;
 
 /**
  * Class PaymentService
@@ -146,24 +146,32 @@ class PaymentService
  *
  * @return bool
  */
-    public function allowedCountries(Basket $basket, $allowedCountry)
-    {
-        $allowedCountry = str_replace(' ', '', strtoupper($allowedCountry));
-        $allowedCountryArray = explode(',', $allowedCountry);
-        try {
-            if(!is_null($basket) && $basket instanceof Basket && !empty($basket->customerInvoiceAddressId)) {
-                $billingAddressId = $basket->customerInvoiceAddressId;
-                $billingAddress = $this->paymentHelper->getCustomerAddress((int) $billingAddressId);
-                $country = $this->countryRepository->findIsoCode($billingAddress->countryId, 'iso_code_2');
-                if(!empty($billingAddress) && !empty($country) && in_array($country, $allowedCountryArray)) {
-                    return true;
-                }
-            }
-        } catch(\Exception $e) {
-            return false;
-        }
+    public function allowedCountries(Basket $basket, $allowedCountry): bool
+     {
+    // Normalize allowed countries to INT IDs
+    $allowedCountries = [];
+    if (is_array($allowedCountry)) {
+        $allowedCountries = array_map('intval', $allowedCountry);
+    } else {
+        $allowedCountries = array_map('intval', explode(',', (string) $allowedCountry));
+    }
+
+    try {
+        // Get billing address
+        $billingAddress = $this->paymentHelper->getCustomerAddress((int) $basket->customerInvoiceAddressId);
+        // Customer country ID (INT)
+        $customerCountryId = (int) $billingAddress->country->id;
+        $isAllowed = in_array($customerCountryId, $allowedCountries, true);
+
+        return $isAllowed;
+
+    } catch (\Throwable $e) {
+        $this->getLogger(__METHOD__)->error('Allowed country check exception', [
+            'message' => $e->getMessage()
+        ]);
         return false;
     }
+     }
     /**
      * Show payment for Minimum Order Amount
      *
@@ -458,7 +466,11 @@ class PaymentService
      */
     public function getReturnPageUrl()
     {
-        return $this->webstoreHelper->getCurrentWebstoreConfiguration()->domainSsl . '/' . $this->sessionStorage->getLocaleSettings()->language . '/payment/novalnet/paymentResponse';
+        $path = $this->webstoreHelper->getCurrentWebstoreConfiguration()->domainSsl . '/' . $this->sessionStorage->getLocaleSettings()->language . '/payment/novalnet/paymentResponse';
+        if(UrlQuery::shouldAppendTrailingSlash()) {
+            $path .= '/';
+        }
+        return $path;
     }
 
     /**
@@ -468,7 +480,11 @@ class PaymentService
     */
     public function getRedirectPaymentUrl()
     {
-        return $this->webstoreHelper->getCurrentWebstoreConfiguration()->domainSsl . '/' . $this->sessionStorage->getLocaleSettings()->language . '/payment/novalnet/redirectPayment';
+        $path = $this->webstoreHelper->getCurrentWebstoreConfiguration()->domainSsl . '/' . $this->sessionStorage->getLocaleSettings()->language . '/payment/novalnet/redirectPayment';
+        if(UrlQuery::shouldAppendTrailingSlash()) {
+            $path .= '/';
+        }
+        return $path;
     }
 
     /**
@@ -911,7 +927,11 @@ class PaymentService
     */
     public function getProcessPaymentUrl()
     {
-        return $this->webstoreHelper->getCurrentWebstoreConfiguration()->domainSsl . '/' . $this->sessionStorage->getLocaleSettings()->language . '/payment/novalnet/processPayment';
+        $path = $this->webstoreHelper->getCurrentWebstoreConfiguration()->domainSsl . '/' . $this->sessionStorage->getLocaleSettings()->language . '/payment/novalnet/processPayment';
+        if(UrlQuery::shouldAppendTrailingSlash()) {
+            $path .= '/';
+        }
+        return $path;
     }
 
     /**
