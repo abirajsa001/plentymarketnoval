@@ -461,36 +461,31 @@ class NovalnetAssistant extends WizardProvider
         [
             $paymentMethodKey . 'MinimumOrderAmount' =>
             [
-                'type'          => 'double',
-                'defaultValue'  => 0,
+                'type'      => 'text',
                 'options'   => [
-                                'isPriceInput' => true,
-                                'decimalCount' => 2,
                                 'name'      => 'NovalnetAssistant.novalnetMinimumOrderAmountLabel',
                                 'tooltip'   => 'NovalnetAssistant.novalnetMinimumOrderAmountTooltip'
                                ]
             ],
             $paymentMethodKey . 'MaximumOrderAmount' =>
             [
-                'type'          => 'double',
-                'defaultValue'  => 0,
+                'type'      => 'text',
                 'options'   => [
-                                'isPriceInput' => true,
-                                'decimalCount' => 2,
                                 'name'      => 'NovalnetAssistant.novalnetMaximumOrderAmountLabel',
                                 'tooltip'   => 'NovalnetAssistant.novalnetMaximumOrderAmountTooltip',
                                ]
             ],
             $paymentMethodKey . 'AllowedCountry' =>
             [
-                'type'       => 'text',
-                'options'    => [
-                                 'name'      => 'NovalnetAssistant.novalnetAllowedCountryLabel'
-                                ]
-             ]
+               'type'       => 'text',
+               'options'    => [
+                                'name'      => 'NovalnetAssistant.novalnetAllowedCountryLabel'
+                               ]
+            ]
         ];
         return $config;
     }
+
 
     /**
     * Create On-hold configuration

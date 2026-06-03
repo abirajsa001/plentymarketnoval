@@ -146,7 +146,7 @@ class PaymentService
  *
  * @return bool
  */
-public function allowedCountries(Basket $basket, $allowedCountry)
+    public function allowedCountries(Basket $basket, $allowedCountry)
     {
         $allowedCountry = str_replace(' ', '', strtoupper($allowedCountry));
         $allowedCountryArray = explode(',', $allowedCountry);
