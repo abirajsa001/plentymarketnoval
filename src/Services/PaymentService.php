@@ -25,7 +25,7 @@ use Plenty\Modules\Payment\Contracts\PaymentRepositoryContract;
 use Plenty\Modules\Basket\Contracts\BasketRepositoryContract;
 use Plenty\Plugin\Http\Response;
 use Plenty\Plugin\Log\Loggable;
-use Plenty\Modules\Webshop\Helpers\UrlQuery;
+// use Plenty\Modules\Webshop\Helpers\UrlQuery;
 
 /**
  * Class PaymentService
@@ -458,11 +458,7 @@ class PaymentService
      */
     public function getReturnPageUrl()
     {
-        $path = $this->webstoreHelper->getCurrentWebstoreConfiguration()->domainSsl . '/' . $this->sessionStorage->getLocaleSettings()->language . '/payment/novalnet/paymentResponse';
-        if(UrlQuery::shouldAppendTrailingSlash()) {
-            $path .= '/';
-        }
-        return $path;
+        return $this->webstoreHelper->getCurrentWebstoreConfiguration()->domainSsl . '/' . $this->sessionStorage->getLocaleSettings()->language . '/payment/novalnet/paymentResponse';
     }
 
     /**
@@ -472,11 +468,7 @@ class PaymentService
     */
     public function getRedirectPaymentUrl()
     {
-        $path = $this->webstoreHelper->getCurrentWebstoreConfiguration()->domainSsl . '/' . $this->sessionStorage->getLocaleSettings()->language . '/payment/novalnet/redirectPayment';
-        if(UrlQuery::shouldAppendTrailingSlash()) {
-            $path .= '/';
-        }
-        return $path;
+        return $this->webstoreHelper->getCurrentWebstoreConfiguration()->domainSsl . '/' . $this->sessionStorage->getLocaleSettings()->language . '/payment/novalnet/redirectPayment';
     }
 
     /**
@@ -919,11 +911,7 @@ class PaymentService
     */
     public function getProcessPaymentUrl()
     {
-        $path = $this->webstoreHelper->getCurrentWebstoreConfiguration()->domainSsl . '/' . $this->sessionStorage->getLocaleSettings()->language . '/payment/novalnet/processPayment';
-        if(UrlQuery::shouldAppendTrailingSlash()) {
-            $path .= '/';
-        }
-        return $path;
+        return $this->webstoreHelper->getCurrentWebstoreConfiguration()->domainSsl . '/' . $this->sessionStorage->getLocaleSettings()->language . '/payment/novalnet/processPayment';
     }
 
     /**
